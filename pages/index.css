@@ -12,3 +12,10 @@
 @import url(../blocks/profile/__info-profession/profile__info-profession.css);
 @import url(../blocks/profile/__edit-button/profile____edit-button.css);
 @import url(../blocks/profile/__add-button/profile__add-button.css);
+@import url(../blocks/places/places.css);
+@import url(../blocks/places/__place/places__place.css);
+@import url(../blocks/places/__place-image/places__place-image.css);
+@import url(../blocks/places/__place-info/places__place-info.css);
+@import url(../blocks/places/__place-name/places__place-name.css);
+@import url(../blocks/places/__place-like-button/places__place-like-button.css);
+@import url(../blocks/places/__place-like-button/_active/places__place-like-button_ative.css);
