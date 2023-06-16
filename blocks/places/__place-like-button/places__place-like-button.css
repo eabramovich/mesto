@@ -6,3 +6,8 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.places__place-like-button:hover{
+    opacity: 0.5;
+}
+

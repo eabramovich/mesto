@@ -19,3 +19,5 @@
 @import url(../blocks/places/__place-name/places__place-name.css);
 @import url(../blocks/places/__place-like-button/places__place-like-button.css);
 @import url(../blocks/places/__place-like-button/_active/places__place-like-button_ative.css);
+@import url(../blocks/footer/footer.css);
+@import url(../blocks/footer/__copyright/footer__copyright.css);
