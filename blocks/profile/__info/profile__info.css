@@ -1,0 +1,5 @@
+.profile__info {
+    width: calc(100% - 120px - 150px);
+    padding-left: 30px;
+    box-sizing: border-box;
+}
