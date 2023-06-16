@@ -2,3 +2,9 @@
     max-width: 358px;
     margin: auto;
 }
+
+@media  screen and (max-width: 600px) {
+    .edit-form__main-container {
+        max-width: 238px;
+    }
+}

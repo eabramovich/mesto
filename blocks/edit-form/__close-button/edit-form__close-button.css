@@ -14,3 +14,12 @@
 .edit-form__close-button:hover {
     opacity: 0.6;
 }
+
+@media screen and (max-width: 600px) {
+    .edit-form__close-button {
+        transform: translate(0px,-35px);
+        width: 20px;
+        height: 20px;
+        background-image: url(../../../images/close\ icon-small.svg);
+    }
+}
