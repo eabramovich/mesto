@@ -1,11 +1,11 @@
-.edit-form__input-container {
+.popup__input-container {
     border: none;
     padding: 0;
     margin: 50px 0 48px;
  }
 
  @media  screen and (max-width: 600px) {
-    .edit-form__input-container {
+    .popup__input-container {
         margin: 75px 0 45px;
     }
  }

@@ -1,4 +1,4 @@
-.edit-form__item {
+.popup__item {
     padding: 0 0 9px 0;
     margin-bottom: 30px;
     display: block;
@@ -10,10 +10,10 @@
     line-height: 1.2;
 }
 
-.edit-form__item:last-child {
+.popup__item:last-child {
     margin: 0;
 }
 
-.edit-form__item:focus {
+.popup__item:focus {
     outline: none;
 }

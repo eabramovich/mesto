@@ -1,13 +1,13 @@
 let editButton = document.querySelector('.profile__edit-button');
-let closeButtton = document.querySelector('.edit-form__close-button');
-let formElement = document.querySelector('.edit-form');
+let closeButtton = document.querySelector('.popup__close-button');
+let formElement = document.querySelector('.popup');
 
 function openEditForm() {
     let editForm = document.querySelector('.popup');
     editForm.classList.add('popup_opened');
     // Находим поля формы в DOM
-    let nameInput = document.querySelector('.edit-form__name');
-    let jobInput = document.querySelector('.edit-form__profession');
+    let nameInput = document.querySelector('.popup__name');
+    let jobInput = document.querySelector('.popup__profession');
     // Узнаем текущее значение данных профиля
     let profileName = document.querySelector('.profile__info-name').textContent;
     let profileProfession = document.querySelector('.profile__info-profession').textContent;
@@ -24,8 +24,8 @@ function closeEditForm() {
 function handleFormSubmit(evt) {
     evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
     // Находим поля формы в DOM
-    let nameInput = document.querySelector('.edit-form__name');
-    let jobInput = document.querySelector('.edit-form__profession');
+    let nameInput = document.querySelector('.popup__name');
+    let jobInput = document.querySelector('.popup__profession');
     let name = nameInput.value; // Получение значения поля name
     let profession = jobInput.value; // Получение значения поля profession
     let profileInfoName = document.querySelector('.profile__info-name');
