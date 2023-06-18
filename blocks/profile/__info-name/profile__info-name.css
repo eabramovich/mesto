@@ -8,17 +8,32 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    max-width: 500px;
 }
 
+@media screen and (max-width: 918px) {
+    .profile__info-name {
+        margin-left: 48px;
+        max-width: 450px;
+    }
+}
 @media screen and (max-width: 600px) {
     .profile__info-name {
-        text-align: center;
+        max-width: 400px;
+        margin-left: 28px;
+        font-size: 27px;
+        line-height: 1.2;
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 500px) {
     .profile__info-name {
-        font-size: 27px;
-        line-height: 1.2;
+        max-width: 300px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .profile__info-name {
+        max-width: 200px;
     }
 }

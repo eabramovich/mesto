@@ -1,5 +1,5 @@
 .places__place-image {
     width: 100%;
     border-radius: 10px 10px 0 0;
-    vertical-align: bottom;
+    display: block;
 }

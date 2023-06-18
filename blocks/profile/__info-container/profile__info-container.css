@@ -2,28 +2,18 @@
     display: flex;
     align-items: baseline;
     gap: 24px;
-    max-width: 550px;
+}
+
+@media screen and (max-width: 918px) {
+    .profile__info-container {
+        position: relative;
+    }
 }
 
 @media screen and (max-width: 600px) {
     .profile__info-container {
         justify-content: center;
-        /* display: grid;
-        grid-template-columns:minmax(250px, 659px) 18px; */
         gap: 10px;
-        max-width: 450px;
         margin: auto;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    .profile__info-container {
-        max-width: 350px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .profile__info-container {
-        max-width: 250px;
     }
 }

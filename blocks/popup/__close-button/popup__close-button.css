@@ -1,14 +1,15 @@
 .popup__close-button {
     position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(39px, -39px);
+    top: -39px;
+    right: -39px;
     width: 32px;
     height: 32px;
     background-image: url(../../../images/close-icon.png);
+    background-color: transparent;
     background-position: center;
     background-repeat: no-repeat;
-    
+    cursor: pointer;
+    border: none;
 }
 
 .popup__close-button:hover {
@@ -17,9 +18,10 @@
 
 @media screen and (max-width: 600px) {
     .popup__close-button {
-        transform: translate(0px,-35px);
+        right: 0px;
+        top: -34px;
         width: 20px;
         height: 20px;
-        background-image: url(../../../images/close\ icon-small.svg);
+        background-image: url(../../../images/close-icon-small.svg);
     }
 }   
