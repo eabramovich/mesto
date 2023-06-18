@@ -8,6 +8,8 @@
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+    object-fit: contain;
+    align-self: center;
 }
 
 .profile__edit-button:hover {
