@@ -121,14 +121,35 @@ function handleAddFormSubmit(evt) {
     placeLinkInput.value = '';
 }
 
+function toggleLikeCard(elem) {
+    elem.classList.toggle('places__place-like-button_active');
+}
+
 cardsLoad();
 
+//Открытие формы редактирования профиля
 editButton.addEventListener('click', openEditForm);
+//Открытие формы добавления новой карточки
 addButton.addEventListener('click', openAddForm);
+
+
+//Обработчик закрытия всех попапов
 closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', function(evt) {
         closePopup(evt.target);
-    })
+    });
 });
+
+const likeButtons = document.querySelectorAll('.places__place-like-button');
+//Обработчик для лайка карточек
+likeButtons.forEach((likeButton) => {
+    console.log('123');
+    likeButton.addEventListener('click', function(evt) {
+        console.log(evt.target);
+        toggleLikeCard(evt.target);
+    });
+});
+
+
 editForm.addEventListener('submit', handleEditFormSubmit);
 addForm.addEventListener('submit', handleAddFormSubmit);
