@@ -125,6 +125,11 @@ function toggleLikeCard(elem) {
     elem.classList.toggle('places__place-like-button_active');
 }
 
+function deleteCard(elem) {
+    const card = elem.closest('.places__place');
+    card.remove();
+}
+
 cardsLoad();
 
 //Открытие формы редактирования профиля
@@ -135,7 +140,7 @@ addButton.addEventListener('click', openAddForm);
 
 //Обработчик закрытия всех попапов
 closeButtons.forEach((closeButton) => {
-    closeButton.addEventListener('click', function(evt) {
+    closeButton.addEventListener('click', (evt) => {
         closePopup(evt.target);
     });
 });
@@ -143,13 +148,18 @@ closeButtons.forEach((closeButton) => {
 const likeButtons = document.querySelectorAll('.places__place-like-button');
 //Обработчик для лайка карточек
 likeButtons.forEach((likeButton) => {
-    console.log('123');
-    likeButton.addEventListener('click', function(evt) {
-        console.log(evt.target);
+    likeButton.addEventListener('click', (evt) => {
         toggleLikeCard(evt.target);
     });
 });
 
+const deleteButtons = document.querySelectorAll('.places__place-trash-button');
+//Обработчик удаления карточек
+deleteButtons.forEach((deleteButton) => {
+    deleteButton.addEventListener('click', (evt) => {
+        deleteCard(evt.target);
+    });
+});
 
 editForm.addEventListener('submit', handleEditFormSubmit);
 addForm.addEventListener('submit', handleAddFormSubmit);

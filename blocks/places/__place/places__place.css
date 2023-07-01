@@ -1,3 +1,4 @@
 .places__place {
     border-radius: 10px;
+    position: relative;
 }
