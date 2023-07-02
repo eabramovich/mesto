@@ -7,7 +7,7 @@
 * Удалять карточки
 * Лайкать карточки
 
-Проект доступен по [ссылке на GitHub Pages] (https://eabramovich.github.io/mesto/)
+Проект доступен по [ссылке на GitHub Pages](https://eabramovich.github.io/mesto/)
 
 Для его реализации были использованы следующие инструменты:
 * Построение сетки с помощью Flexbox и Grid Layout
