@@ -1,24 +1,3 @@
-const editButton = document.querySelector('.profile__edit-button');
-const addButton = document.querySelector('.profile__add-button');
-const closeButtons = document.querySelectorAll('.popup__close-button');
-
-// Находим форму редактирования профиля
-const editForm = document.querySelector('[name="edit-form"]');
-// Находим поля формы редактирования профиля в DOM
-const nameInput = document.querySelector('.popup__name');
-const jobInput = document.querySelector('.popup__profession');
-// Находим поля c данными пользователя из профиля
-const profileInfoName = document.querySelector('.profile__info-name');
-const profileInfoProfession = document.querySelector('.profile__info-profession');
-
-// Находим форму добавления нового места
-const addForm = document.querySelector('[name="add-form"]');
-// Находим поля формы добавления нового места
-const placeNameInput = document.querySelector('[name="placename"]');
-const placeLinkInput = document.querySelector('[name="placelink"]');
-//Находим темплейт для карточки
-const cardTemplate = document.querySelector('#place').content;
-
 const initialCards = [
     {
       name: 'Архыз',
@@ -45,6 +24,77 @@ const initialCards = [
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
+
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+const closeButtons = document.querySelectorAll('.popup__close-button');
+
+// Находим форму редактирования профиля
+const editForm = document.querySelector('[name="edit-form"]');
+// Находим поля формы редактирования профиля в DOM
+const nameInput = document.querySelector('.popup__name');
+const jobInput = document.querySelector('.popup__profession');
+// Находим поля c данными пользователя из профиля
+const profileInfoName = document.querySelector('.profile__info-name');
+const profileInfoProfession = document.querySelector('.profile__info-profession');
+
+// Находим форму добавления нового места
+const addForm = document.querySelector('[name="add-form"]');
+// Находим поля формы добавления нового места
+const placeNameInput = document.querySelector('[name="placename"]');
+const placeLinkInput = document.querySelector('[name="placelink"]');
+
+//Находим темплейт для карточки
+const cardTemplate = document.querySelector('#place').content;
+const popupImage = document.querySelector('.popup__image');
+const popupCaption = document.querySelector('.popup__caption');
+
+
+function createCard(name, link) {
+    // клонируем содержимое тега template
+    const placeElement = cardTemplate.querySelector('.places__place').cloneNode(true);
+
+    // наполняем содержимым
+    placeElement.querySelector('.places__place-name').textContent = name;
+    const placeImage = placeElement.querySelector('.places__place-image');
+    placeImage.src = link;
+    placeImage.alt = name;
+
+    return placeElement
+}
+
+
+function addCard(card) {
+    const cardsContainer = document.querySelector('.places__container');
+    cardsContainer.prepend(card);
+    //Добавляем обработчик на событие клика на кнопку лайк для вновь добавленной карточки
+    const likeButton = card.querySelector('.places__place-like-button');
+    likeButton.addEventListener('click', (evt) => {
+        toggleLikeCard(evt.target);
+    });
+    //Добавляем обработчик на событие клика на кнопку удаления для вновь добавленной карточки
+    const deleteButton = card.querySelector('.places__place-trash-button');
+    deleteButton.addEventListener('click', (evt) => {
+        deleteCard(evt.target);
+    });
+    //Добавляем обработчик на событие клика на картинку для вновь добавленной карточки
+    const placeImage = card.querySelector('.places__place-image');
+    placeImage.addEventListener('click', (evt) => {
+        const place = evt.target.parentElement;
+        const caption = place.querySelector('.places__place-name').textContent;
+        popupImage.src = evt.target.src;
+        popupCaption.textContent = caption;
+        openPopup(popupImage);
+    });
+}
+
+
+function cardsLoad() {
+    for(let i=0; i < initialCards.length; i++) {
+        let card = createCard( initialCards[i].name, initialCards[i].link);
+        addCard(card);
+    }
+}
 
 
 function closePopup(elem) {
@@ -73,35 +123,6 @@ function openAddForm() {
     openPopup(addForm);
 }
 
-
-function createCard(name, link) {
-    // клонируем содержимое тега template
-    const placeElement = cardTemplate.querySelector('.places__place').cloneNode(true);
-
-    // наполняем содержимым
-    placeElement.querySelector('.places__place-name').textContent = name;
-    const placeImage = placeElement.querySelector('.places__place-image');
-    placeImage.src = link;
-    placeImage.alt = name;
-
-    return placeElement
-}
-
-
-function addCard(card) {
-    const cardsContainer = document.querySelector('.places__container');
-    cardsContainer.prepend(card);
-}
-
-
-function cardsLoad() {
-    for(let i=0; i < initialCards.length; i++) {
-        let card = createCard( initialCards[i].name, initialCards[i].link);
-        addCard(card);
-    }
-}
-
-
 function handleEditFormSubmit(evt) {
     evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
     // Получение значения поля username с формы и заполнение в профиле поля, где хранится имя пользователя
@@ -121,15 +142,18 @@ function handleAddFormSubmit(evt) {
     placeLinkInput.value = '';
 }
 
+
 function toggleLikeCard(elem) {
     elem.classList.toggle('places__place-like-button_active');
 }
+
 
 function deleteCard(elem) {
     const card = elem.closest('.places__place');
     card.remove();
 }
 
+// Первоначальная загрузка карточек
 cardsLoad();
 
 //Открытие формы редактирования профиля
@@ -137,27 +161,10 @@ editButton.addEventListener('click', openEditForm);
 //Открытие формы добавления новой карточки
 addButton.addEventListener('click', openAddForm);
 
-
 //Обработчик закрытия всех попапов
 closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', (evt) => {
         closePopup(evt.target);
-    });
-});
-
-const likeButtons = document.querySelectorAll('.places__place-like-button');
-//Обработчик для лайка карточек
-likeButtons.forEach((likeButton) => {
-    likeButton.addEventListener('click', (evt) => {
-        toggleLikeCard(evt.target);
-    });
-});
-
-const deleteButtons = document.querySelectorAll('.places__place-trash-button');
-//Обработчик удаления карточек
-deleteButtons.forEach((deleteButton) => {
-    deleteButton.addEventListener('click', (evt) => {
-        deleteCard(evt.target);
     });
 });
 

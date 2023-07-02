@@ -1,13 +1,13 @@
 .popup {
+    display: flex;
     width: 100vw;
     height: 100vh;
+    min-width: 320px;
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
     left: 0;
-    display: none;
-}
-
-.popup_opened {
-    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
 }
