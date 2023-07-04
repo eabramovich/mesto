@@ -49,6 +49,9 @@ const cardTemplate = document.querySelector('#place').content;
 const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 
+//Находим контейнер для карточек
+const cardsContainer = document.querySelector('.places__container');
+
 
 function createCard(name, link) {
     // клонируем содержимое тега template
@@ -60,32 +63,32 @@ function createCard(name, link) {
     placeImage.src = link;
     placeImage.alt = name;
 
+     //Добавляем обработчик на событие клика на кнопку лайк
+     const likeButton = placeElement.querySelector('.places__place-like-button');
+     likeButton.addEventListener('click', (evt) => {
+         toggleLikeCard(evt.target);
+     });
+ 
+     //Добавляем обработчик на событие клика на кнопку удаления
+     const deleteButton = placeElement.querySelector('.places__place-trash-button');
+     deleteButton.addEventListener('click', (evt) => {
+         deleteCard(evt.target);
+     });
+     
+    //Добавляем обработчик на событие клика на картинку
+    placeImage.addEventListener('click', (evt) => {
+        popupImage.src = link;
+        popupImage.alt = name;
+        popupCaption.textContent = name;
+        openPopup(popupImage);
+    });
+
     return placeElement
 }
 
 
 function addCard(card) {
-    const cardsContainer = document.querySelector('.places__container');
     cardsContainer.prepend(card);
-    //Добавляем обработчик на событие клика на кнопку лайк для вновь добавленной карточки
-    const likeButton = card.querySelector('.places__place-like-button');
-    likeButton.addEventListener('click', (evt) => {
-        toggleLikeCard(evt.target);
-    });
-    //Добавляем обработчик на событие клика на кнопку удаления для вновь добавленной карточки
-    const deleteButton = card.querySelector('.places__place-trash-button');
-    deleteButton.addEventListener('click', (evt) => {
-        deleteCard(evt.target);
-    });
-    //Добавляем обработчик на событие клика на картинку для вновь добавленной карточки
-    const placeImage = card.querySelector('.places__place-image');
-    placeImage.addEventListener('click', (evt) => {
-        const place = evt.target.parentElement;
-        const caption = place.querySelector('.places__place-name').textContent;
-        popupImage.src = evt.target.src;
-        popupCaption.textContent = caption;
-        openPopup(popupImage);
-    });
 }
 
 
@@ -138,8 +141,7 @@ function handleAddFormSubmit(evt) {
     const newPlace = createCard(placeNameInput.value, placeLinkInput.value);
     addCard(newPlace);
     closePopup(addForm);
-    placeNameInput.value = '';
-    placeLinkInput.value = '';
+    addForm.reset();
 }
 
 
