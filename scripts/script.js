@@ -28,6 +28,7 @@ const initialCards = [
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const closeButtons = document.querySelectorAll('.popup__close-button');
+const popups = document.querySelectorAll('.popup');
 
 // Находим форму редактирования профиля
 const editForm = document.forms.edit_form;
@@ -164,6 +165,7 @@ const showItemError = (formElement, inputElement, errorMessage) => {
     errorElement.classList.add('popup__item-error_active');
 };
  
+
 const hideItemError = (formElement, inputElement) => {
     // Находим элемент ошибки
     const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
@@ -172,17 +174,15 @@ const hideItemError = (formElement, inputElement) => {
     errorElement.textContent = '';
 }
 
+
 const isValid = (formElement, inputElement) => {
-    console.log(inputElement.validity);
-    console.log(inputElement.validationMessage);
     if(!inputElement.validity.valid) {
         showItemError(formElement, inputElement, inputElement.validationMessage)
-        console.log('show');
     } else {
         hideItemError(formElement, inputElement);
-        console.log('hide');
     }
 }
+
 
 const hasInvalidInput = (inputList) => {
     return inputList.some((inputElement) => {
@@ -192,6 +192,7 @@ const hasInvalidInput = (inputList) => {
         return !inputElement.validity.valid;
     });
 }
+
 
 const toggleButtonState = (inputList, buttonElement) => {
     if(hasInvalidInput(inputList)) {
@@ -203,7 +204,8 @@ const toggleButtonState = (inputList, buttonElement) => {
     }
 }
 
-const setEventListeners = (formElement) => {
+
+const setFormInputEventListeners = (formElement) => {
     // Делаем массив из всех полей внутри формы
     const inputList = Array.from(formElement.querySelectorAll('.popup__item'));
     const buttonSubmit = formElement.querySelector('.popup__button');
@@ -217,25 +219,40 @@ const setEventListeners = (formElement) => {
             toggleButtonState(inputList, buttonSubmit);
         });
     });
-}
+};
 
-const enableValidation = () => {
+
+const enableFormValidation = () => {
     // Делаем массив из всех форм на странице
     const formList = Array.from(document.querySelectorAll('.popup__form'));
 
     formList.forEach((formElement) => {
-        console.log(formElement);
-        setEventListeners(formElement);
+        setFormInputEventListeners(formElement);
     });
 };
+
+const getOpenedPopup = () => {
+    return document.querySelector('.popup_opened');
+}
+
+const hasOpenedPopup = () => {
+    if(getOpenedPopup()) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 
 // Первоначальная загрузка информации на страницу
 initialLoad();
 
-enableValidation();
+//Активация валидации форм
+enableFormValidation();
 
 //Открытие формы редактирования профиля
 editButton.addEventListener('click', openEditForm);
+
 //Открытие формы добавления новой карточки
 addButton.addEventListener('click', openAddForm);
 
@@ -244,6 +261,22 @@ closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', (evt) => {
         closePopup(evt.target);
     });
+});
+
+
+// Закрытие попавов кликом на оверлей
+popups.forEach((popup) => {
+    popup.addEventListener('click', (evt) => {
+        if(evt.target.classList.contains('popup_opened')) {
+            closePopup(evt.target);
+        }
+    });
+})
+
+document.addEventListener('keydown', (evt) => {
+    if(evt.key === 'Escape' && hasOpenedPopup()) {
+        closePopup(getOpenedPopup());
+    }
 });
 
 editForm.addEventListener('submit', handleEditFormSubmit);
