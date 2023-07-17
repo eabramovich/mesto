@@ -30,19 +30,19 @@ const addButton = document.querySelector('.profile__add-button');
 const closeButtons = document.querySelectorAll('.popup__close-button');
 
 // Находим форму редактирования профиля
-const editForm = document.querySelector('[name="edit-form"]');
+const editForm = document.forms.edit_form;
 // Находим поля формы редактирования профиля в DOM
-const nameInput = document.querySelector('.popup__name');
-const jobInput = document.querySelector('.popup__profession');
+const nameInput = editForm.elements.username;
+const jobInput = editForm.elements.profession;
 // Находим поля c данными пользователя из профиля
 const profileInfoName = document.querySelector('.profile__info-name');
 const profileInfoProfession = document.querySelector('.profile__info-profession');
 
 // Находим форму добавления нового места
-const addForm = document.querySelector('[name="add-form"]');
+const addForm = document.forms.add_form;
 // Находим поля формы добавления нового места
-const placeNameInput = document.querySelector('[name="placename"]');
-const placeLinkInput = document.querySelector('[name="placelink"]');
+const placeNameInput = addForm.elements.placename;
+const placeLinkInput = addForm.elements.placelink;
 
 //Находим темплейт для карточки
 const cardTemplate = document.querySelector('#place').content;
@@ -92,9 +92,13 @@ function addCard(card) {
 }
 
 
-function cardsLoad() {
+function initialLoad() {
+    // Заполняем поля формы редактирования профиля
+    nameInput.value = profileInfoName.textContent;
+    jobInput.value = profileInfoProfession.textContent;
+
     for(let i=0; i < initialCards.length; i++) {
-        let card = createCard( initialCards[i].name, initialCards[i].link);
+        const card = createCard( initialCards[i].name, initialCards[i].link);
         addCard(card);
     }
 }
@@ -115,9 +119,6 @@ function openPopup(elem) {
 function openEditForm() {
     //Открываем попам с формой редактирования профиля
     openPopup(editForm);
-    // Заполняем поля формы
-    nameInput.value = profileInfoName.textContent;
-    jobInput.value = profileInfoProfession.textContent;
 }
 
 
@@ -155,8 +156,83 @@ function deleteCard(elem) {
     card.remove();
 }
 
-// Первоначальная загрузка карточек
-cardsLoad();
+const showItemError = (formElement, inputElement, errorMessage) => {
+    // Находим элемент ошибки
+    const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
+    inputElement.classList.add('popup__item_type_error');
+    errorElement.textContent = errorMessage;
+    errorElement.classList.add('popup__item-error_active');
+};
+ 
+const hideItemError = (formElement, inputElement) => {
+    // Находим элемент ошибки
+    const errorElement = formElement.querySelector(`.${inputElement.id}-item-error`);
+    inputElement.classList.remove('popup__item_type_error');
+    errorElement.classList.remove('popup__item-error_active');
+    errorElement.textContent = '';
+}
+
+const isValid = (formElement, inputElement) => {
+    console.log(inputElement.validity);
+    console.log(inputElement.validationMessage);
+    if(!inputElement.validity.valid) {
+        showItemError(formElement, inputElement, inputElement.validationMessage)
+        console.log('show');
+    } else {
+        hideItemError(formElement, inputElement);
+        console.log('hide');
+    }
+}
+
+const hasInvalidInput = (inputList) => {
+    return inputList.some((inputElement) => {
+        // Если поле не валидно, колбэк вернет true
+        // Обход массива прекратится и вся функция
+        // hasInvalidInput вернет true
+        return !inputElement.validity.valid;
+    });
+}
+
+const toggleButtonState = (inputList, buttonElement) => {
+    if(hasInvalidInput(inputList)) {
+        buttonElement.classList.add('popup__button_inactive');
+        buttonElement.disabled = true;
+    } else {
+        buttonElement.classList.remove('popup__button_inactive');
+        buttonElement.disabled = false;
+    }
+}
+
+const setEventListeners = (formElement) => {
+    // Делаем массив из всех полей внутри формы
+    const inputList = Array.from(formElement.querySelectorAll('.popup__item'));
+    const buttonSubmit = formElement.querySelector('.popup__button');
+    
+    toggleButtonState(inputList, buttonSubmit);
+
+    inputList.forEach((inputElement) => {
+        // каждому полю добавляем обработчик события input
+        inputElement.addEventListener('input', () => {
+            isValid(formElement, inputElement);
+            toggleButtonState(inputList, buttonSubmit);
+        });
+    });
+}
+
+const enableValidation = () => {
+    // Делаем массив из всех форм на странице
+    const formList = Array.from(document.querySelectorAll('.popup__form'));
+
+    formList.forEach((formElement) => {
+        console.log(formElement);
+        setEventListeners(formElement);
+    });
+};
+
+// Первоначальная загрузка информации на страницу
+initialLoad();
+
+enableValidation();
 
 //Открытие формы редактирования профиля
 editButton.addEventListener('click', openEditForm);
@@ -172,3 +248,4 @@ closeButtons.forEach((closeButton) => {
 
 editForm.addEventListener('submit', handleEditFormSubmit);
 addForm.addEventListener('submit', handleAddFormSubmit);
+

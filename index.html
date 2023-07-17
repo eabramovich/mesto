@@ -35,13 +35,15 @@
             <div class="popup__container">
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Редактировать профиль</h2>
-                <form class="popup__form" name="edit-form">
+                <form class="popup__form" name="edit_form" novalidate>
                     <fieldset class="popup__input-container">
-                        <input type="text" class="popup__item popup__name" name="username">
-                        <input type="text" class="popup__item popup__profession" name="profession">
+                        <input id="username" type="text" class="popup__item popup__name" name="username" minlength="2" maxlength="40" required>
+                        <span class="username-item-error popup__item-error"></span>
+                        <input id="profession" type="text" class="popup__item popup__profession" name="profession" minlength="2" maxlength="200" required>
+                        <span class="profession-item-error popup__item-error"></span>
                     </fieldset>
                     <fieldset class="popup__handlers">
-                        <input type="submit" class="popup__button" value="Сохранить">
+                        <button type="submit" class="popup__button">Сохранить</button>
                     </fieldset>
                 </form>
             </div>
@@ -50,13 +52,15 @@
             <div class="popup__container">
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Новое место</h2>
-                <form class="popup__form" name="add-form">
+                <form class="popup__form" name="add_form" novalidate>
                     <fieldset class="popup__input-container">
-                        <input type="text" class="popup__item popup__place-name" name="placename" placeholder="Название">
-                        <input type="text" class="popup__item popup__place-link" name="placelink" placeholder="Ссылка на картинку">
+                        <input id="placename" type="text" class="popup__item popup__place-name" name="placename" placeholder="Название" minlength="2" maxlength="30" required>
+                        <span class="placename-item-error popup__item-error"></span>
+                        <input id="placelink" type="url" class="popup__item popup__place-link" name="placelink" placeholder="Ссылка на картинку" required>
+                        <span class="placelink-item-error popup__item-error"></span>
                     </fieldset>
                     <fieldset class="popup__handlers">
-                        <input type="submit" class="popup__button" value="Сохранить">
+                        <button type="submit" class="popup__button">Создать</button>
                     </fieldset>
                 </form>
             </div>
