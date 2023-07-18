@@ -36,15 +36,11 @@
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Редактировать профиль</h2>
                 <form class="popup__form" name="edit_form" novalidate>
-                    <fieldset class="popup__input-container">
-                        <input id="username" type="text" class="popup__item popup__name" name="username" minlength="2" maxlength="40" required>
-                        <span class="username-item-error popup__item-error"></span>
-                        <input id="profession" type="text" class="popup__item popup__profession" name="profession" minlength="2" maxlength="200" required>
-                        <span class="profession-item-error popup__item-error"></span>
-                    </fieldset>
-                    <fieldset class="popup__handlers">
-                        <button type="submit" class="popup__button">Сохранить</button>
-                    </fieldset>
+                    <input id="username" type="text" class="popup__item popup__name" name="username" placeholder="Имя" minlength="2" maxlength="40" required>
+                    <span class="username-item-error popup__item-error"></span>
+                    <input id="profession" type="text" class="popup__item popup__profession" name="profession" placeholder="О себе" minlength="2" maxlength="200" required>
+                    <span class="profession-item-error popup__item-error"></span>
+                    <button type="submit" class="popup__button">Сохранить</button>
                 </form>
             </div>
         </section>
@@ -53,19 +49,15 @@
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Новое место</h2>
                 <form class="popup__form" name="add_form" novalidate>
-                    <fieldset class="popup__input-container">
-                        <input id="placename" type="text" class="popup__item popup__place-name" name="placename" placeholder="Название" minlength="2" maxlength="30" required>
-                        <span class="placename-item-error popup__item-error"></span>
-                        <input id="placelink" type="url" class="popup__item popup__place-link" name="placelink" placeholder="Ссылка на картинку" required>
-                        <span class="placelink-item-error popup__item-error"></span>
-                    </fieldset>
-                    <fieldset class="popup__handlers">
-                        <button type="submit" class="popup__button">Создать</button>
-                    </fieldset>
+                    <input id="placename" type="text" class="popup__item popup__place-name" name="placename" placeholder="Название" minlength="2" maxlength="30" required>
+                    <span class="placename-item-error popup__item-error"></span>
+                    <input id="placelink" type="url" class="popup__item popup__place-link" name="placelink" placeholder="Ссылка на картинку" required>
+                    <span class="placelink-item-error popup__item-error"></span>
+                    <button type="submit" class="popup__button">Создать</button>
                 </form>
             </div>
         </section>
-        <section class="popup popup_image">
+        <section class="popup popup_type_image">
             <div class="popup__image-container">
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <img class="popup__image" src="#" alt="">
@@ -83,6 +75,7 @@
             </li>
         </template>
     </div>
+    <script src="scripts/cards.js"></script>
     <script src="scripts/script.js"></script>
     <script src="scripts/validation.js"></script>
 </body>

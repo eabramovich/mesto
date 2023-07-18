@@ -9,6 +9,7 @@
     border-radius: 2px;
     border: 0;
     cursor: pointer;
+    margin-top: 18px;
 }
 
 .popup__button:hover {
@@ -19,5 +20,6 @@
     .popup__button {
         font-size: 14px;
         height: 46px;
+        margin-top: 16px;
     }
 }

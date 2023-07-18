@@ -1,30 +1,3 @@
-const initialCards = [
-    {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-      name: 'Ростов-на-Дону',
-      link: 'https://images.unsplash.com/photo-1599293220344-64dc45238326?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'
-    },
-    {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
-
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const closeButtons = document.querySelectorAll('.popup__close-button');
@@ -35,6 +8,7 @@ const editForm = document.forms.edit_form;
 // Находим поля формы редактирования профиля в DOM
 const nameInput = editForm.elements.username;
 const jobInput = editForm.elements.profession;
+const editFormSubmitButton = editForm.querySelector('.popup__button');
 // Находим поля c данными пользователя из профиля
 const profileInfoName = document.querySelector('.profile__info-name');
 const profileInfoProfession = document.querySelector('.profile__info-profession');
@@ -81,7 +55,7 @@ function createCard(name, link) {
         popupImage.src = link;
         popupImage.alt = name;
         popupCaption.textContent = name;
-        openPopup(popupImage);
+        openPopup(getClosestPopup(popupImage));
     });
 
     return placeElement
@@ -94,38 +68,56 @@ function addCard(card) {
 
 
 function initialLoad() {
-    // Заполняем поля формы редактирования профиля
-    nameInput.value = profileInfoName.textContent;
-    jobInput.value = profileInfoProfession.textContent;
+    initialCards.forEach((card) => {
+        const cardElement = createCard(card.name, card.link);
+        addCard(cardElement);
+    });
+}
 
-    for(let i=0; i < initialCards.length; i++) {
-        const card = createCard( initialCards[i].name, initialCards[i].link);
-        addCard(card);
+function getClosestPopup(elem) {
+    const closestPopup = elem.closest('.popup');
+    return closestPopup;
+}
+
+
+function getOpenedPopup() {
+    return document.querySelector('.popup_opened');
+}
+
+
+function closeByEsc(evt){
+    if(evt.key === 'Escape') {
+        closePopup(getOpenedPopup());
     }
 }
 
-
-function closePopup(elem) {
-    const popup = elem.closest('.popup');
+function closePopup(popup) {
     popup.classList.remove('popup_opened');
+    document.removeEventListener('keydown', closeByEsc)
 }
 
 
-function openPopup(elem) {
-    const popup = elem.closest('.popup');
+function openPopup(popup) {
     popup.classList.add('popup_opened');
+    document.addEventListener('keydown', closeByEsc);
 }
 
 
 function openEditForm() {
     //Открываем попам с формой редактирования профиля
-    openPopup(editForm);
+    openPopup(getClosestPopup(editForm));
+
+     // Заполняем поля формы редактирования профиля
+     nameInput.value = profileInfoName.textContent;
+     jobInput.value = profileInfoProfession.textContent;
+
+     enableButton(editFormSubmitButton);
 }
 
 
 function openAddForm() {
     //Открываем попап с формой добавления нового места
-    openPopup(addForm);
+    openPopup(getClosestPopup(addForm));
 }
 
 function handleEditFormSubmit(evt) {
@@ -134,7 +126,19 @@ function handleEditFormSubmit(evt) {
     profileInfoName.textContent = nameInput.value; 
     // Получение значения поля profession с формы и заполнение в профиле поля, где хранится профессия пользователя
     profileInfoProfession.textContent = jobInput.value; 
-    closePopup(editForm);
+    closePopup(getClosestPopup(editForm));
+}
+
+
+function disabledButton(button) {
+    button.classList.add('popup__button_inactive');
+    button.disabled = true;
+}
+
+
+function enableButton(button) {
+    button.classList.remove('popup__button_inactive');
+    button.disabled = false;
 }
 
 
@@ -142,8 +146,9 @@ function handleAddFormSubmit(evt) {
     evt.preventDefault();
     const newPlace = createCard(placeNameInput.value, placeLinkInput.value);
     addCard(newPlace);
-    closePopup(addForm);
+    closePopup(getClosestPopup(addForm));
     addForm.reset();
+    disabledButton(evt.submitter);
 }
 
 
@@ -158,19 +163,6 @@ function deleteCard(elem) {
 }
 
 
-const getOpenedPopup = () => {
-    return document.querySelector('.popup_opened');
-}
-
-const hasOpenedPopup = () => {
-    if(getOpenedPopup()) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-
 // Первоначальная загрузка информации на страницу
 initialLoad();
 
@@ -183,24 +175,19 @@ addButton.addEventListener('click', openAddForm);
 //Обработчик закрытия всех попапов
 closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', (evt) => {
-        closePopup(evt.target);
+        closePopup(getClosestPopup(evt.target));
     });
 });
 
 // Закрытие попавов кликом на оверлей
 popups.forEach((popup) => {
-    popup.addEventListener('click', (evt) => {
+    popup.addEventListener('mousedown', (evt) => {
         if(evt.target.classList.contains('popup_opened')) {
             closePopup(evt.target);
         }
     });
 })
 
-document.addEventListener('keydown', (evt) => {
-    if(evt.key === 'Escape' && hasOpenedPopup()) {
-        closePopup(getOpenedPopup());
-    }
-});
 
 editForm.addEventListener('submit', handleEditFormSubmit);
 addForm.addEventListener('submit', handleAddFormSubmit);
