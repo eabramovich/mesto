@@ -1,7 +1,12 @@
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const closeButtons = document.querySelectorAll('.popup__close-button');
+
+// Находим попапы
 const popups = document.querySelectorAll('.popup');
+const popupEditForm = document.querySelector('.popup_edit-form');
+const popupAddForm = document.querySelector('.popup_add-form');
+const popupImageContainer = document.querySelector('.popup_type_image')
 
 // Находим форму редактирования профиля
 const editForm = document.forms.edit_form;
@@ -55,7 +60,7 @@ function createCard(name, link) {
         popupImage.src = link;
         popupImage.alt = name;
         popupCaption.textContent = name;
-        openPopup(getClosestPopup(popupImage));
+        openPopup(popupImageContainer);
     });
 
     return placeElement
@@ -105,7 +110,7 @@ function openPopup(popup) {
 
 function openEditForm() {
     //Открываем попам с формой редактирования профиля
-    openPopup(getClosestPopup(editForm));
+    openPopup(popupEditForm);
 
      // Заполняем поля формы редактирования профиля
      nameInput.value = profileInfoName.textContent;
@@ -117,7 +122,7 @@ function openEditForm() {
 
 function openAddForm() {
     //Открываем попап с формой добавления нового места
-    openPopup(getClosestPopup(addForm));
+    openPopup(popupAddForm);
 }
 
 function handleEditFormSubmit(evt) {
@@ -126,13 +131,7 @@ function handleEditFormSubmit(evt) {
     profileInfoName.textContent = nameInput.value; 
     // Получение значения поля profession с формы и заполнение в профиле поля, где хранится профессия пользователя
     profileInfoProfession.textContent = jobInput.value; 
-    closePopup(getClosestPopup(editForm));
-}
-
-
-function disabledButton(button) {
-    button.classList.add('popup__button_inactive');
-    button.disabled = true;
+    closePopup(popupEditForm);
 }
 
 
@@ -146,7 +145,7 @@ function handleAddFormSubmit(evt) {
     evt.preventDefault();
     const newPlace = createCard(placeNameInput.value, placeLinkInput.value);
     addCard(newPlace);
-    closePopup(getClosestPopup(addForm));
+    closePopup(popupAddForm);
     addForm.reset();
     disabledButton(evt.submitter);
 }

@@ -44,6 +44,11 @@ const hasInvalidInput = (inputList) => {
     });
 }
 
+function disabledButton(button) {
+    button.classList.add('popup__button_inactive');
+    button.disabled = true;
+}
+
 
 const toggleButtonState = (inputList, buttonElement, formAttributeList) => {
     if(hasInvalidInput(inputList)) {
