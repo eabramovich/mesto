@@ -116,7 +116,8 @@ function openEditForm() {
      nameInput.value = profileInfoName.textContent;
      jobInput.value = profileInfoProfession.textContent;
 
-     enableButton(editFormSubmitButton);
+     // Активация кнопки submit
+     enableButton(editForm, formAttributeList);
 }
 
 
@@ -135,19 +136,15 @@ function handleEditFormSubmit(evt) {
 }
 
 
-function enableButton(button) {
-    button.classList.remove('popup__button_inactive');
-    button.disabled = false;
-}
-
-
 function handleAddFormSubmit(evt) {
     evt.preventDefault();
     const newPlace = createCard(placeNameInput.value, placeLinkInput.value);
     addCard(newPlace);
     closePopup(popupAddForm);
     addForm.reset();
-    disabledButton(evt.submitter);
+
+    // Деактивация кнопкки submit
+    disabledButton(evt.submitter, formAttributeList);
 }
 
 

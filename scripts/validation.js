@@ -44,17 +44,23 @@ const hasInvalidInput = (inputList) => {
     });
 }
 
-function disabledButton(button) {
-    button.classList.add('popup__button_inactive');
+function disabledButton(button, formAttributeList) {
+    button.classList.add(formAttributeList.inactiveButtonClass);
     button.disabled = true;
+}
+
+
+function enableButton(button, formAttributeList) {
+    button.classList.remove(formAttributeList.inactiveButtonClass);
+    button.disabled = false;
 }
 
 
 const toggleButtonState = (inputList, buttonElement, formAttributeList) => {
     if(hasInvalidInput(inputList)) {
-        disabledButton(buttonElement);
+        disabledButton(buttonElement, formAttributeList);
     } else {
-        enableButton(buttonElement);
+        enableButton(buttonElement, formAttributeList);
     }
 }
 
@@ -78,7 +84,6 @@ const setFormInputEventListeners = (formElement, formAttributeList) => {
 
 const enableFormValidation = (formAttributeList) => {
     // Делаем массив из всех форм на странице
-    console.log(formAttributeList.formSelector);
     const formList = Array.from(document.querySelectorAll(formAttributeList.formSelector));
 
     formList.forEach((formElement) => {
