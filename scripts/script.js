@@ -117,7 +117,7 @@ function openEditForm() {
      jobInput.value = profileInfoProfession.textContent;
 
      // Активация кнопки submit
-     enableButton(editForm, formAttributeList);
+     enableButton(editFormSubmitButton, formAttributeList);
 }
 
 
