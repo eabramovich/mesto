@@ -1,5 +1,5 @@
-import Card from "./cards.js";
-import FormValidator from "./validation.js";
+import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
 import { initialCards } from "./data.js";
 import { cardsContainer, profileInfoName, profileInfoProfession} from "./constant.js";
 import { editButton, addButton} from "./constant.js";
@@ -7,7 +7,7 @@ import { popups, closeButtons} from "./constant.js";
 import { popupImageContainer, popupCaption, popupImage} from "./constant.js";
 import { popupAddForm, addForm, placeNameInput, placeLinkInput} from "./constant.js";
 import { popupEditForm, editForm, nameInput, jobInput, editFormSubmitButton} from "./constant.js";
-import { cardTemplateSelector, formAttributeList} from "./constant.js";
+import { cardTemplateSelector, validationConfig} from "./constant.js";
 
 function getClosestPopup(elem) {
     const closestPopup = elem.closest('.popup');
@@ -28,7 +28,7 @@ function closePopup(popup) {
     document.removeEventListener('keydown', closeByEsc);
 }
 
-const handleOpenPopup = function(name, link) {
+const handleOpenImagePopup = function(name, link) {
     popupImage.src = link;
     popupImage.alt = name;
     popupCaption.textContent = name;
@@ -41,84 +41,93 @@ function closeByEsc(evt){
     }
 }
 
-function addCard(name, link) {
-    const newCard = new Card(name, link, cardTemplateSelector, handleOpenPopup);
-    const cardElement = newCard.generateCard();
-    cardsContainer.prepend(cardElement);
+function createCard(cardData) {
+    const newCard = new Card(cardData, cardTemplateSelector, handleOpenImagePopup);
+    const card = newCard.generateCard();
+
+    return card
 }
 
-function initialLoad() {
+function addCard(cardData) {
+    const card = createCard(cardData)
+    cardsContainer.prepend(card);
+}
+
+function renderInitialCards() {
     initialCards.forEach((card) => {
-        addCard(card.name, card.link);
+        addCard(card);
     });
 }
 
 function openAddForm() {
-    // Open the popup to add a new place
+    /**  Open the popup to add a new place */
     openPopup(popupAddForm);
 }
 
 function handleAddFormSubmit(evt) {
     evt.preventDefault();
-    addCard(placeNameInput.value, placeLinkInput.value);
+    const cardData = {
+        name: placeNameInput.value,
+        link: placeLinkInput.value
+    }
+    addCard(cardData);
     closePopup(popupAddForm);
     addForm.reset();
 
-    // Deactivate the submit button
-    addFormValidator.disabledButton(evt.submitter);
+    /** Deactivate the submit button */
+    addFormValidator.disableButton(evt.submitter);
 }
 
 function openEditForm() {
-    // Open the popup to edit the data profile
+    /** Open the popup to edit the data profile */
     openPopup(popupEditForm);
-    editFormValidator.enableValidation();
 
-     // Fill the fields to profile editing form
+     /** Fill the fields to profile editing form */
      nameInput.value = profileInfoName.textContent;
      jobInput.value = profileInfoProfession.textContent;
 
-     // For case when we close form with error and open again
-     editFormValidator.hideItemError(nameInput);
-     editFormValidator.hideItemError(jobInput);
+     /** For case when we close form with error and open again */
+     editFormValidator.hideErrors();
 
-     // Activate the submit button
-     editFormValidator.enableButton(editFormSubmitButton);
+     /**  Activate the submit button */
+     editFormValidator.enableButton();
 }
 
 function handleEditFormSubmit(evt) {
-    evt.preventDefault(); // Cancel the standard form submission
-    // Get the value of the username from the edit form and set username in the profile info block
+    /**  Cancel the standard form submission */
+    evt.preventDefault(); 
+    /**  Get the value of the username from the edit form and set username in the profile info block */
     profileInfoName.textContent = nameInput.value; 
-    // Get the value of the profession from the edit form and set profession in the profile info block
+    /** Get the value of the profession from the edit form and set profession in the profile info block */
     profileInfoProfession.textContent = jobInput.value; 
     closePopup(popupEditForm);
 }
 
-// Cards initial load
-initialLoad();
+/**  Cards initial load */
+renderInitialCards();
 
-//Handler to open the addform
+/** Handler to open the addform */
 addButton.addEventListener('click', openAddForm);
-// Add validation for addForm
-const addFormValidator = new FormValidator(addForm, formAttributeList);
+/**  Add validation for addForm */
+const addFormValidator = new FormValidator(addForm, validationConfig);
 addFormValidator.enableValidation();
 addForm.addEventListener('submit', handleAddFormSubmit);
 
-// Handler to open the editForm
+/**  Handler to open the editForm */
 editButton.addEventListener('click', openEditForm);
-// Add validation for editForm
-const editFormValidator = new FormValidator(editForm, formAttributeList);
+/**  Add validation for editForm */
+const editFormValidator = new FormValidator(editForm, validationConfig);
 editFormValidator.enableValidation();
 editForm.addEventListener('submit', handleEditFormSubmit);
 
-//Handler for closing all popups
+/** Handler for closing all popups */
 closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', (evt) => {
         closePopup(getClosestPopup(evt.target));
     });
 });
 
-// Handler for closing popups by clicking on the overlay
+/** Handler for closing popups by clicking on the overlay */
 popups.forEach((popup) => {
     popup.addEventListener('mousedown', (evt) => {
         if(evt.target.classList.contains('popup_opened')) {

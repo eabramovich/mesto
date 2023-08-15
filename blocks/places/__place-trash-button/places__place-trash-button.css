@@ -13,4 +13,5 @@
 
 .places__place-trash-button:hover {
     opacity: 0.5;
+    cursor: pointer;
 }
