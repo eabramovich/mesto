@@ -4,23 +4,27 @@ export default class PopupWithImage extends Popup {
     constructor(popupSelector, handleFormSubmit) {
         super(popupSelector);
         this._handleFormSubmit = handleFormSubmit;
+        this._inputList = Array.from(this._popup.querySelectorAll('.popup__item'));
     }
 
-    getInputValues() {
-        this._inputList = Array.from(this._popup.querySelectorAll('.popup__item'));
-        this._inputData = {};
+    
+    _getInputValues() {
+        const inputData = {};
         this._inputList.forEach((input) => {
-            this._inputData[input.name] = input.value;
+            inputData[input.name] = input.value;
         })
 
-        return this._inputData;
+        return inputData;
     }
 
     setEventListeners() {
         super.setEventListeners();
 
         this._form = this._popup.querySelector('.popup__form');
-        this._form.addEventListener('submit', this._handleFormSubmit.bind(this));    
+        this._form.addEventListener('submit', evt => {
+            evt.preventDefault();
+            this._handleFormSubmit(this._getInputValues());
+        });    
     }
 
     close() {

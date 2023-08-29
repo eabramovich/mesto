@@ -10,7 +10,7 @@ import { initialCards } from "../utils/data.js";
 import { cardsContainerSelector, profileInfoNameSelector, profilePersonalInfoSelector} from "../utils/constant.js";
 import { editButton, addButton} from "../utils/constant.js";
 import { popupTypeImageSelector} from "../utils/constant.js";
-import { popupAddFormSelector, addForm, placeNameInput, placeLinkInput} from "../utils/constant.js";
+import { popupAddFormSelector, addForm} from "../utils/constant.js";
 import { popupEditFormSelector, editForm, nameInput, jobInput} from "../utils/constant.js";
 import { cardTemplateSelector, validationConfig} from "../utils/constant.js";
 
@@ -39,9 +39,8 @@ const handleOpenImagePopup = function(name, link) {
 
 function createCard(cardData) {
     const newCard = new Card(cardData, cardTemplateSelector, handleOpenImagePopup);
-    const generatedCard = newCard.generateCard();
 
-    return generatedCard;
+    return newCard.generateCard();
 }
 
 const cardList = new Section({
@@ -58,19 +57,15 @@ function openAddForm() {
     addFormValidator.hideErrors();
 }
 
-function handleAddFormSubmit(evt) {
-    evt.preventDefault();
-    const cardData = {
-        name: placeNameInput.value,
-        link: placeLinkInput.value
-    }
+function handleAddFormSubmit(cardData) {
+    console.log(cardData);
     const cardElement = createCard(cardData);
     cardList.addItem(cardElement);
 
     popupAddForm.close();
 
     /** Deactivate the submit button */
-    addFormValidator.disableButton(evt.submitter);
+    addFormValidator.disableButton();
 }
 
 function openEditForm() {
@@ -88,11 +83,7 @@ function openEditForm() {
     editFormValidator.enableButton();
 }
 
-function handleEditFormSubmit(evt) {
-    /**  Cancel the standard form submission */
-    evt.preventDefault(); 
-    /**  Get the data of the user from the edit form */
-    const dataProfile = popupEditForm.getInputValues();
+function handleEditFormSubmit(dataProfile) {
     /**  Set the data of the user to the  profile info block */
     userInfo.setUserInfo(dataProfile.username, dataProfile.profession)
 

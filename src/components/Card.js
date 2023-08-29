@@ -1,7 +1,7 @@
 export default class Card {
   constructor(card, templateSelector, handleOpenImagePopup) {
-    this._name = card.name;
-    this._link = card.link;
+    this._name = card.placename;
+    this._link = card.placelink;
     this._templateSelector = templateSelector;
     this._handleOpenImagePopup = handleOpenImagePopup;
   }
@@ -22,6 +22,9 @@ export default class Card {
 
   _removeCard = () => {
     this._element.remove();
+    this._name = null;
+    this._link = null;
+    this._likeButton = null;
     this._element = null;
   }
 
