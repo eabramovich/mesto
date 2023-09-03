@@ -5,6 +5,7 @@ export const cardsContainerSelector = '.places__container';
 export const profileInfoNameSelector = '.profile__info-name';
 export const profilePersonalInfoSelector = '.profile__info-profession';
 export const profileInfoImageSelector = '.profile__avatar';
+export const editAvatarIcon = document.querySelector('.profile__avatar-overlay');
 
 /** These are constants for the edit and add buttons. */
 export const editButton = document.querySelector('.profile__edit-button');
@@ -25,6 +26,11 @@ export const popupEditFormSelector = '.popup_edit-form';
 export const editForm = document.forms.edit_form;
 export const nameInput = editForm.elements.username;
 export const jobInput = editForm.elements.profession;
+
+/** These are constants for the update avatar form. */
+export const popupUpdateAvatarFormSelector = '.popup_update-avatar-form';
+export const updateAvatarForm = document.forms.update_avatar_form;
+export const profileImageLinkInput = updateAvatarForm.elements.avatar;
 
 export const cardTemplateSelector = '#place';
 

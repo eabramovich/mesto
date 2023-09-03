@@ -2,5 +2,6 @@
     display: flex;
     flex-flow: column;
     justify-content: center;
+    row-gap: 3px;
 }
     

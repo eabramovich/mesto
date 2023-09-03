@@ -12,7 +12,10 @@
         </header>
         <main class="content">
             <div class="profile">
-                <img src="" alt="Аватарка" class="profile__avatar">
+                <div class="profile__avatar-container">
+                    <img src="" alt="Аватарка" class="profile__avatar">
+                    <div class="profile__avatar-overlay"></div>
+                </div>
                 <div class="profile__info">
                     <div class="profile__info-container">
                         <h1 class="profile__info-name"></h1>
@@ -56,6 +59,17 @@
                 </form>
             </div>
         </section>
+        <section class="popup popup_update-avatar-form">
+            <div class="popup__container">
+                <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
+                <h2 class="popup__title">Обновить аватар</h2>
+                <form class="popup__form" name="update_avatar_form" novalidate>
+                    <input id="avatarlink" type="url" class="popup__item popup__avatar-link" name="avatar" placeholder="Ссылка на вашу фотографию" required>
+                    <span class="avatarlink-item-error popup__item-error"></span>
+                    <button type="submit" class="popup__button">Сохранить</button>
+                </form>
+            </div>
+        </section>
         <section class="popup popup_type_image">
             <div class="popup__image-container">
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
@@ -64,10 +78,13 @@
             </div>
         </section>
         <section class="popup popup_type_confirmation">
-            <div class="popup__image-container">
+            <div class="popup__container">
                 <button  class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Вы уверены?</h2>
-                <button type="button" class="popup__button">Да</button>
+                <div class="popup__confirmation-container">
+                    <button type="button" class="popup__button popup__button_type_confirmation">Да</button>
+                </div>
+                
             </div>
         </section>
         <template id="place">

@@ -8,12 +8,13 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
-//import { initialCards } from "../utils/data.js";
-import { cardsContainerSelector, profileInfoNameSelector, profilePersonalInfoSelector, profileInfoImageSelector} from "../utils/constant.js";
+import { cardsContainerSelector, profileInfoNameSelector, profilePersonalInfoSelector} from "../utils/constant.js";
+import { profileInfoImageSelector, editAvatarIcon} from "../utils/constant.js";
 import { editButton, addButton} from "../utils/constant.js";
 import { popupTypeImageSelector, popupTypeConfirmationSelector} from "../utils/constant.js";
 import { popupAddFormSelector, addForm} from "../utils/constant.js";
 import { popupEditFormSelector, editForm, nameInput, jobInput} from "../utils/constant.js";
+import { popupUpdateAvatarFormSelector, updateAvatarForm, profileImageLinkInput } from '../utils/constant.js';
 import { cardTemplateSelector, validationConfig} from "../utils/constant.js";
 
 
@@ -43,6 +44,9 @@ popupAddForm.setEventListeners();
 const popupEditForm = new PopupWithForm(popupEditFormSelector, handleEditFormSubmit);
 popupEditForm.setEventListeners();
 
+const popupUpdateAvatarForm = new PopupWithForm(popupUpdateAvatarFormSelector, handleUpdateAvatarFormSubmit);
+popupUpdateAvatarForm.setEventListeners();
+
 /**  Add validation for editForm */
 const editFormValidator = new FormValidator(editForm, validationConfig);
 editFormValidator.enableValidation();
@@ -50,6 +54,9 @@ editFormValidator.enableValidation();
 /**  Add validation for addForm */
 const addFormValidator = new FormValidator(addForm, validationConfig);
 addFormValidator.enableValidation();
+
+const updateAvatarFormValidator = new FormValidator(updateAvatarForm, validationConfig)
+updateAvatarFormValidator.enableValidation();
 
 const handleOpenImagePopup = function(name, link) {
     popupWithImage.open(name, link);
@@ -190,6 +197,30 @@ function handleEditFormSubmit(dataProfile) {
    
 }
 
+function openUpdateAvatarForm() {
+  popupUpdateAvatarForm.open();
+
+  profileImageLinkInput.value = userData.avatar;
+  
+  updateAvatarFormValidator.hideErrors();
+  updateAvatarFormValidator.enableButton();
+}
+
+function handleUpdateAvatarFormSubmit(avatarData) {
+  console.log(avatarData.avatar);
+  api.updateUserAvatar(avatarData.avatar)
+    .then((res) => {
+      console.log(res);
+      userInfo.setUserImage(avatarData.avatar);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(function() {
+      popupUpdateAvatarForm.close();
+    });
+}
+
 /**  Cards initial load */
 //cardList.renderedItems();
 
@@ -198,6 +229,12 @@ addButton.addEventListener('click', openAddForm);
 
 /**  Handler to open the editForm */
 editButton.addEventListener('click', openEditForm);
+
+/**  Handler to open the popupUpdateAvatarForm */
+editAvatarIcon.addEventListener('click', openUpdateAvatarForm);
+
+
+
 
 
 

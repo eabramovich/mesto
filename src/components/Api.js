@@ -6,6 +6,7 @@ export default class Api {
 
   _handleResponse(response) {
     if(response.ok) {
+      //console.log(response.json());
       return response.json();
     }
     
@@ -32,6 +33,21 @@ export default class Api {
       }) 
     })
     .then((res) => {
+      console.log(res);
+      return this._handleResponse(res);
+    })
+  }
+
+  updateUserAvatar(imageLink) {
+    return fetch(this._url + '/users/me/avatar', {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: imageLink
+      })
+    })
+    .then((res) => {
+      console.log(res);
       return this._handleResponse(res);
     })
   }
