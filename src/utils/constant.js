@@ -4,6 +4,7 @@ export const cardsContainerSelector = '.places__container';
 /** These are constants for the user data. */
 export const profileInfoNameSelector = '.profile__info-name';
 export const profilePersonalInfoSelector = '.profile__info-profession';
+export const profileInfoImageSelector = '.profile__avatar';
 
 /** These are constants for the edit and add buttons. */
 export const editButton = document.querySelector('.profile__edit-button');
@@ -11,6 +12,9 @@ export const addButton = document.querySelector('.profile__add-button');
 
 /** These is constant for the image popup */
 export const popupTypeImageSelector = '.popup_type_image';
+
+/** These is constant for the confirmation popup */
+export const popupTypeConfirmationSelector = '.popup_type_confirmation';
 
 /** These are constants for the add form. */
 export const popupAddFormSelector = '.popup_add-form';

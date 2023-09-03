@@ -18,9 +18,12 @@
 @import url(../blocks/places/__place/places__place.css);
 @import url(../blocks/places/__place-image/places__place-image.css);
 @import url(../blocks/places/__place-trash-button/places__place-trash-button.css);
+@import url(../blocks/places/__place-trash-button/_disabled/places__place-trash-button_disabled.css);
 @import url(../blocks/places/__place-info/places__place-info.css);
 @import url(../blocks/places/__place-name/places__place-name.css);
+@import url(../blocks/places/__like-container/places__like-container.css);
 @import url(../blocks/places/__place-like-button/places__place-like-button.css);
+@import url(../blocks/places/__place-like-count/places__place-like-count.css);
 @import url(../blocks/places/__place-like-button/_active/places__place-like-button_ative.css);
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);

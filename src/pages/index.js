@@ -3,27 +3,45 @@ import './index.css';
 import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import FormValidator from "../components/FormValidator.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-import { initialCards } from "../utils/data.js";
-import { cardsContainerSelector, profileInfoNameSelector, profilePersonalInfoSelector} from "../utils/constant.js";
+import Api from "../components/Api.js";
+//import { initialCards } from "../utils/data.js";
+import { cardsContainerSelector, profileInfoNameSelector, profilePersonalInfoSelector, profileInfoImageSelector} from "../utils/constant.js";
 import { editButton, addButton} from "../utils/constant.js";
-import { popupTypeImageSelector} from "../utils/constant.js";
+import { popupTypeImageSelector, popupTypeConfirmationSelector} from "../utils/constant.js";
 import { popupAddFormSelector, addForm} from "../utils/constant.js";
 import { popupEditFormSelector, editForm, nameInput, jobInput} from "../utils/constant.js";
 import { cardTemplateSelector, validationConfig} from "../utils/constant.js";
 
+
+const userInfo = new UserInfo({
+    userNameSelector: profileInfoNameSelector, 
+    userInfoSelector: profilePersonalInfoSelector,
+    userImageSelector: profileInfoImageSelector
+});
+
+const api = new Api({
+    baseUrl:'https://mesto.nomoreparties.co/v1/cohort-74', 
+    headers: {
+        authorization: 'f5d4ffa0-2360-4168-849b-08882ca95571',
+        'Content-Type': 'application/json'
+    }
+});
+
 const popupWithImage = new PopupWithImage(popupTypeImageSelector);
 popupWithImage.setEventListeners();
+
+const popupRemoveCardConfirmation = new PopupWithConfirmation(popupTypeConfirmationSelector, handleRemoveCardConfirmation);
+popupRemoveCardConfirmation.setEventListeners();
 
 const popupAddForm = new PopupWithForm(popupAddFormSelector, handleAddFormSubmit);
 popupAddForm.setEventListeners();
 
 const popupEditForm = new PopupWithForm(popupEditFormSelector, handleEditFormSubmit);
 popupEditForm.setEventListeners();
-
-const userInfo = new UserInfo({userNameSelector: profileInfoNameSelector, userInfoSelector: profilePersonalInfoSelector});
 
 /**  Add validation for editForm */
 const editFormValidator = new FormValidator(editForm, validationConfig);
@@ -37,19 +55,87 @@ const handleOpenImagePopup = function(name, link) {
     popupWithImage.open(name, link);
 };
 
+let cardIdForRemove;
+let cardForRemove;
+const handleRemoveCard= function(cardId, card) {
+  popupRemoveCardConfirmation.open();
+  cardIdForRemove = cardId;
+  cardForRemove = card;
+}
+
+function handleRemoveCardConfirmation() {
+  console.log("Confirm remove card", cardIdForRemove);
+  api.removeCard(cardIdForRemove)
+    .then((res) => {
+      console.log(res);
+      cardForRemove.removeCardElement();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupRemoveCardConfirmation.close();
+    })
+}
+
+function handleLikeCard(cardId, card) {
+  console.log(card._likes);
+  if(card.isCurrentUserLikeCard()) {
+    api.removeLikeCard(cardId)
+      .then((res) => {
+        console.log(res.likes.length);
+        card.toggleLikeCard();
+        card.setLikesCount(res.likes.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  } else{
+    api.addLikeCard(cardId)
+    .then((res) => {
+      console.log(res.likes.length);
+      card.toggleLikeCard();
+      card.setLikesCount(res.likes.length);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+}
+
 function createCard(cardData) {
-    const newCard = new Card(cardData, cardTemplateSelector, handleOpenImagePopup);
+    const newCard = new Card(cardData, userData._id, cardTemplateSelector, handleOpenImagePopup, handleRemoveCard, handleLikeCard);
 
     return newCard.generateCard();
 }
 
-const cardList = new Section({
-    items: initialCards,
-    renderer: (item) => {
-      const cardElement = createCard(item);
-      cardList.addItem(cardElement);
-    }
-}, cardsContainerSelector);
+let userData = {};
+let cardList;
+
+/** User info initial load */
+api.getUserInfo()
+  .then((data) => {
+    //console.log(data);
+    userData = data;
+    userInfo.setUserInfo(data.name, data.about);
+    userInfo.setUserImage(data.avatar);
+  })
+  .then(() => {
+    api.getInitialCards()
+    .then((data) => {
+      console.log(data);
+      cardList = new Section({
+        items: data.reverse(),
+        renderer: (item) => {
+          //console.log(userData._id);
+          const cardElement = createCard(item);
+          cardList.addItem(cardElement);
+        }
+      }, cardsContainerSelector);
+
+      cardList.renderedItems();
+    })
+});
 
 function openAddForm() {
     /**  Open the popup to add a new place */
@@ -59,23 +145,29 @@ function openAddForm() {
 
 function handleAddFormSubmit(cardData) {
     console.log(cardData);
-    const cardElement = createCard(cardData);
-    cardList.addItem(cardElement);
+    api.addNewCard(cardData)
+      .then((res) => {
+        const cardElement = createCard(res);
+        cardList.addItem(cardElement);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(function() {
+        popupAddForm.close();
 
-    popupAddForm.close();
-
-    /** Deactivate the submit button */
-    addFormValidator.disableButton();
+        /** Deactivate the submit button */
+        addFormValidator.disableButton();
+      }) 
 }
 
 function openEditForm() {
     /** Open the popup to edit the data profile */
     popupEditForm.open();
 
-    const userData = userInfo.getUserInfo();
     /** Fill the fields to profile editing form */
     nameInput.value = userData.name;
-    jobInput.value = userData.personalInfo;
+    jobInput.value = userData.about;
 
     /** For case when we close form with error and open again */
     editFormValidator.hideErrors();
@@ -85,13 +177,21 @@ function openEditForm() {
 
 function handleEditFormSubmit(dataProfile) {
     /**  Set the data of the user to the  profile info block */
-    userInfo.setUserInfo(dataProfile.username, dataProfile.profession)
-
-    popupEditForm.close();
+    api.updateUserInfo(dataProfile.username, dataProfile.profession)
+      .then((res) => {
+        userInfo.setUserInfo(res.name, res.about);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(function() {
+        popupEditForm.close();
+      });
+   
 }
 
 /**  Cards initial load */
-cardList.renderedItems();
+//cardList.renderedItems();
 
 /** Handler to open the addform */
 addButton.addEventListener('click', openAddForm);
