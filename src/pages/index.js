@@ -74,7 +74,6 @@ function handleRemoveCardConfirmation() {
   console.log("Confirm remove card", cardIdForRemove);
   api.removeCard(cardIdForRemove)
     .then((res) => {
-      console.log(res);
       cardForRemove.removeCardElement();
     })
     .catch((err) => {
@@ -86,11 +85,9 @@ function handleRemoveCardConfirmation() {
 }
 
 function handleLikeCard(cardId, card) {
-  console.log(card._likes);
   if(card.isCurrentUserLikeCard()) {
     api.removeLikeCard(cardId)
       .then((res) => {
-        console.log(res.likes.length);
         card.toggleLikeCard();
         card.setLikesCount(res.likes.length);
       })
@@ -100,7 +97,6 @@ function handleLikeCard(cardId, card) {
   } else{
     api.addLikeCard(cardId)
     .then((res) => {
-      console.log(res.likes.length);
       card.toggleLikeCard();
       card.setLikesCount(res.likes.length);
     })
@@ -122,7 +118,6 @@ let cardList;
 /** User info initial load */
 api.getUserInfo()
   .then((data) => {
-    //console.log(data);
     userData = data;
     userInfo.setUserInfo(data.name, data.about);
     userInfo.setUserImage(data.avatar);
@@ -130,11 +125,9 @@ api.getUserInfo()
   .then(() => {
     api.getInitialCards()
     .then((data) => {
-      console.log(data);
       cardList = new Section({
         items: data.reverse(),
         renderer: (item) => {
-          //console.log(userData._id);
           const cardElement = createCard(item);
           cardList.addItem(cardElement);
         }
@@ -151,7 +144,7 @@ function openAddForm() {
 }
 
 function handleAddFormSubmit(cardData) {
-    console.log(cardData);
+    popupAddForm.changeSubmitButtonName('Сохранение...');
     api.addNewCard(cardData)
       .then((res) => {
         const cardElement = createCard(res);
@@ -162,7 +155,7 @@ function handleAddFormSubmit(cardData) {
       })
       .finally(function() {
         popupAddForm.close();
-
+        popupAddForm.changeSubmitButtonName('Создать');
         /** Deactivate the submit button */
         addFormValidator.disableButton();
       }) 
@@ -171,10 +164,12 @@ function handleAddFormSubmit(cardData) {
 function openEditForm() {
     /** Open the popup to edit the data profile */
     popupEditForm.open();
+    
+    const userData = userInfo.getUserInfo();
 
     /** Fill the fields to profile editing form */
     nameInput.value = userData.name;
-    jobInput.value = userData.about;
+    jobInput.value = userData.personalInfo;
 
     /** For case when we close form with error and open again */
     editFormValidator.hideErrors();
@@ -183,7 +178,7 @@ function openEditForm() {
 }
 
 function handleEditFormSubmit(dataProfile) {
-    /**  Set the data of the user to the  profile info block */
+    popupEditForm.changeSubmitButtonName('Сохранение...');
     api.updateUserInfo(dataProfile.username, dataProfile.profession)
       .then((res) => {
         userInfo.setUserInfo(res.name, res.about);
@@ -192,6 +187,7 @@ function handleEditFormSubmit(dataProfile) {
         console.log(err);
       })
       .finally(function() {
+        popupEditForm.changeSubmitButtonName('Сохранить');
         popupEditForm.close();
       });
    
@@ -207,16 +203,16 @@ function openUpdateAvatarForm() {
 }
 
 function handleUpdateAvatarFormSubmit(avatarData) {
-  console.log(avatarData.avatar);
+  popupUpdateAvatarForm.changeSubmitButtonName('Сохранение...');
   api.updateUserAvatar(avatarData.avatar)
     .then((res) => {
-      console.log(res);
       userInfo.setUserImage(avatarData.avatar);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(function() {
+      popupUpdateAvatarForm.changeSubmitButtonName('Сохранить');
       popupUpdateAvatarForm.close();
     });
 }
