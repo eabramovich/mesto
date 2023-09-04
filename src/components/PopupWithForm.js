@@ -19,7 +19,6 @@ export default class PopupWithForm extends Popup {
     }
 
     changeSubmitButtonName(name) {
-        console.log(name);
         this._submitButton.textContent = name;
     }
 

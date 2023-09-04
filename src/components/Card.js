@@ -47,8 +47,14 @@ export default class Card {
       return cardElement;
   }
 
-  toggleLikeCard = () => {
-    this._likeButton.classList.toggle('places__place-like-button_active');
+  toggleLikeCard = (likes) => {
+    this._likes = likes;
+    if(this.isCurrentUserLikeCard()) {
+      this._likeButton.classList.add('places__place-like-button_active');
+    } else {
+      this._likeButton.classList.remove('places__place-like-button_active');
+    }
+    
   }
 
   removeCardElement = () => {
@@ -73,7 +79,6 @@ export default class Card {
     
     /** Add a click listener to the delete button */
     if(this.isCurrentUserCard()) {
-      //this._deleteButton.addEventListener('click', this._removeCard)
       this._deleteButton.addEventListener('click', () => {
         this._handleRemoveCard(this._cardId, this);
       });
@@ -92,9 +97,7 @@ export default class Card {
     this._element.querySelector('.places__place-name').textContent = this._name;
 
     this.setLikesCount(this._likes.length);
-    if(this.isCurrentUserLikeCard()) {
-      this.toggleLikeCard();
-    }
+    this.toggleLikeCard(this._likes);
 
     if(!this.isCurrentUserCard()) {
       this._deleteButton.classList.add('places__place-trash-button_disabled');

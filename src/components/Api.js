@@ -6,7 +6,6 @@ export default class Api {
 
   _handleResponse(response) {
     if(response.ok) {
-      //console.log(response.json());
       return response.json();
     }
     
@@ -19,7 +18,7 @@ export default class Api {
         headers: this._headers    
       })
       .then((res) => {
-        return res.json();
+        return this._handleResponse(res);
       })
   }
 
@@ -33,7 +32,6 @@ export default class Api {
       }) 
     })
     .then((res) => {
-      console.log(res);
       return this._handleResponse(res);
     })
   }
@@ -47,7 +45,6 @@ export default class Api {
       })
     })
     .then((res) => {
-      console.log(res);
       return this._handleResponse(res);
     })
   }
@@ -58,7 +55,7 @@ export default class Api {
       headers: this._headers    
     })
     .then((res) => {
-      return res.json();
+      return this._handleResponse(res);
     })
   }
 
