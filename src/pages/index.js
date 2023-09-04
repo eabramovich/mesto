@@ -111,6 +111,7 @@ function createCard(cardData) {
 
 let userData = {};
 let cardList;
+let cards;
 
 Promise.all([
   api.getUserInfo(),
@@ -118,7 +119,7 @@ Promise.all([
 ])
 .then((values) => {
   /** User info initial load */
-  let [userData, cards] = values;
+  [userData, cards] = values;
   userInfo.setUserInfo(userData.name, userData.about);
   userInfo.setUserImage(userData.avatar);
 
