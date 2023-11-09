@@ -125,13 +125,14 @@ Promise.all([
 
   /**Cards initial load */
   cardList = new Section({
+    items: cards.reverse(),
     renderer: (item) => {
       const cardElement = createCard(item);
       cardList.addItem(cardElement);
     }
   }, cardsContainerSelector);
   
-  cardList.renderItems(cards.reverse());
+  cardList.renderItems();
 })
 .catch((err) => {
   console.log(err);

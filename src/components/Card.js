@@ -23,21 +23,14 @@ export default class Card {
   }
 
   isCurrentUserLikeCard() {
-    let isLike = false;
-    this._likes.forEach(like => {
-      if(like._id == this._currentUserId) {
-        isLike = true;
-      }
-    });
-
-    return isLike;
+    return this._likes.some(like => like._id == this._currentUserId);
   }
 
   setLikesCount(count) {
     this._element.querySelector('.places__place-like-count').textContent = count;
   }
 
-  _getTemplate = () => {
+  _getTemplate () {
     const cardElement = document
       .querySelector(this._templateSelector)
       .content
@@ -47,7 +40,7 @@ export default class Card {
       return cardElement;
   }
 
-  toggleLikeCard = (likes) => {
+  toggleLikeCard(likes) {
     this._likes = likes;
     if(this.isCurrentUserLikeCard()) {
       this._likeButton.classList.add('places__place-like-button_active');
@@ -57,7 +50,7 @@ export default class Card {
     
   }
 
-  removeCardElement = () => {
+  removeCardElement() {
     this._element.remove();
     this._name = null;
     this._link = null;
@@ -66,7 +59,7 @@ export default class Card {
   }
 
   
-  _setEventListeners = () => {
+  _setEventListeners() {
     this._likeButton = this._element.querySelector('.places__place-like-button');
     this._deleteButton = this._element.querySelector('.places__place-trash-button');
     this._cardImage =  this._element.querySelector('.places__place-image');
@@ -74,7 +67,6 @@ export default class Card {
     /** Add a click listener to the like button */
     this._likeButton.addEventListener('click', () => {
       this._handleLikeCard(this._cardId, this);
-      //this._toggleLikeCard
     });
     
     /** Add a click listener to the delete button */

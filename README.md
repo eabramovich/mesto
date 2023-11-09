@@ -24,3 +24,15 @@
 ![CSS3](https://img.shields.io/badge/-CSS3-1572b6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-f7df1e?logo=javaScript&logoColor=black)
 ![BEM](https://img.shields.io/badge/-BEM-yellowgreen)
+
+## Инструкция по установке:
+
+* Клонировать репозиторий:
+```
+git clone git@github.com:eabramovich/mesto.git
+```
+* Запустить с помощью liveServer
+
+## Ссылка на макет:
+
+[Макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
